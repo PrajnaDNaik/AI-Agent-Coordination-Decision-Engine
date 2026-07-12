@@ -1,0 +1,8 @@
+txt
+langchain
+langchain-openai
+python-dotenv
+fastapi
+uvicorn
+pytest
+pydantic
