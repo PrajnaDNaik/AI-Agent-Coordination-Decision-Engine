@@ -1,4 +1,3 @@
-python
 from langchain.prompts import PromptTemplate
 
 ANALYST_TEMPLATE = PromptTemplate(
