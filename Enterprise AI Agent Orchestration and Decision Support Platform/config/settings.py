@@ -3,7 +3,7 @@ import os
 
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-MODEL_NAME = "gpt-4o-mini"
+MODEL_NAME = "gemini-flash-latest"
 TEMPERATURE = 0.3
