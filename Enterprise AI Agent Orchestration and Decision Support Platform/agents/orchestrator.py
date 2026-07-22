@@ -23,16 +23,16 @@ class Orchestrator:
 
     def run(self, query):
 
-        # Step 1: Analysis
+        
         analysis = self.analyst.analyze(query)
 
-        # Step 2: Planning
+        
         plan = self.planner.create_plan(analysis)
 
-        # Step 3: Execution
+    
         execution = self.executor.execute(plan)
 
-        # Step 4: Decision
+        
         decision_prompt = DECISION_TEMPLATE.format(
             analysis=analysis,
             plan=plan,
