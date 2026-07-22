@@ -1,5 +1,4 @@
-
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from agents.analyst_agent import AnalystAgent
 from agents.planner_agent import PlannerAgent
@@ -17,36 +16,66 @@ class Orchestrator:
         self.planner = PlannerAgent()
         self.executor = ExecutionAgent()
 
-        self.decision_llm = ChatOpenAI(
+        self.decision_llm = ChatGoogleGenerativeAI(
             model=MODEL_NAME,
             temperature=TEMPERATURE
         )
 
     def run(self, query):
 
+        # Step 1: Analysis
         analysis = self.analyst.analyze(query)
 
-        plan = self.planner.create_plan(
-            analysis
-        )
+        # Step 2: Planning
+        plan = self.planner.create_plan(analysis)
 
-        execution = self.executor.execute(
-            plan
-        )
+        # Step 3: Execution
+        execution = self.executor.execute(plan)
 
+        # Step 4: Decision
         decision_prompt = DECISION_TEMPLATE.format(
             analysis=analysis,
             plan=plan,
             execution=execution
         )
 
-        final_decision = self.decision_llm.invoke(
-            decision_prompt
-        ).content
+        response = self.decision_llm.invoke(decision_prompt)
+
+        if hasattr(response, "content"):
+            if isinstance(response.content, list):
+                final_decision = "".join(
+                    part["text"] if isinstance(part, dict) else str(part)
+                    for part in response.content
+                )
+            else:
+                final_decision = response.content
+        else:
+            final_decision = str(response)
 
         return {
             "analysis": analysis,
             "plan": plan,
             "execution": execution,
             "decision": final_decision
-        
+        }
+
+
+if __name__ == "__main__":
+
+    orchestrator = Orchestrator()
+
+    query = input("Enter your enterprise query: ")
+
+    result = orchestrator.run(query)
+
+    print("\n===== ANALYSIS =====")
+    print(result["analysis"])
+
+    print("\n===== PLAN =====")
+    print(result["plan"])
+
+    print("\n===== EXECUTION =====")
+    print(result["execution"])
+
+    print("\n===== FINAL DECISION =====")
+    print(result["decision"])
