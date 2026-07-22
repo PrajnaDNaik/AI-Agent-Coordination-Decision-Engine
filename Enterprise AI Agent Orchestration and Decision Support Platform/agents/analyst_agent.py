@@ -1,4 +1,4 @@
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from prompts.templates import ANALYST_TEMPLATE
 from config.settings import MODEL_NAME, TEMPERATURE
@@ -7,7 +7,9 @@ from config.settings import MODEL_NAME, TEMPERATURE
 class AnalystAgent:
 
     def __init__(self):
-        self.llm = ChatOpenAI(
+        print("Using model:", MODEL_NAME)   
+
+        self.llm = ChatGoogleGenerativeAI(
             model=MODEL_NAME,
             temperature=TEMPERATURE
         )
@@ -20,4 +22,4 @@ class AnalystAgent:
 
         response = self.llm.invoke(prompt)
 
-        return response.content
+        return response.text()
