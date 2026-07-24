@@ -1,9 +1,0 @@
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
-MODEL_NAME = "gemini-flash-latest"
-TEMPERATURE = 0.3
